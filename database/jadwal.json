@@ -1,27 +1,33 @@
 {
-  "120363418382837472@g.us": {
-    "senin": [
-      {
-        "jam": "17:30",
-        "mataKuliah": "web"
-      }
-    ]
-  },
   "120363181075547403@g.us": {
     "selasa": [
       {
-        "jam": "19:30:21:30",
-        "mataKuliah": "Business Intelligence"
+        "jam": "17:30-19:30",
+        "mataKuliah": "Mobile Programming"
       },
       {
-        "jam": "17:30:19:30",
-        "mataKuliah": "Mobile Programming"
+        "jam": "19:30-21:30",
+        "mataKuliah": "Business Intelligence"
       }
     ],
     "senin": [
       {
-        "jam": "17:30:19:30",
+        "jam": "17:30-19:30",
         "mataKuliah": "Web Programming"
+      }
+    ],
+    "kamis": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Web Programming",
+        "ruang": "304"
+      }
+    ],
+    "jumat": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Web Programming",
+        "ruang": "online"
       }
     ]
   }

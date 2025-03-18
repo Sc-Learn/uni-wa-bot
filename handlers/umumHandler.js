@@ -5,12 +5,12 @@ const getQuote = async () => {
     const response = await fetch('http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en');
     const data = await response.json();
     if (data.quoteText) {
-      return `"${data.quoteText}" - ${data.quoteAuthor || 'Unknown'}`;
+      return `${data.quoteText}"\n\n~ *${data.quoteAuthor || 'Unknown'}*`;
     }
-    return 'Maaf, tidak ada kutipan yang ditemukan.';
+    return '📭 *Maaf, tidak ada kutipan yang ditemukan.*';
   } catch (error) {
     console.error('Gagal mengambil kutipan:', error);
-    return 'Maaf, gagal mengambil kutipan. Silakan coba lagi nanti.';
+    return '❌ *Maaf, gagal mengambil kutipan. Silakan coba lagi nanti.*';
   }
 };
 

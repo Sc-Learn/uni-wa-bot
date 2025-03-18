@@ -10,7 +10,7 @@ console.log("Loading database...");
 import { kelas, jadwal, tugas, materi, aktivitas } from './utils/db.js';
 
 console.log("Loading handlers...");
-import { registerKelas, updateKelas, unregisterKelas } from './handlers/kelasHandler.js';
+import { registerKelas, updateKelas, unregisterKelas, infoKelas } from './handlers/kelasHandler.js';
 import { tambahJadwal, hapusJadwal, getJadwal } from './handlers/jadwalHandler.js';
 import { tambahTugas, hapusTugas, getTugas } from './handlers/tugasHandler.js';
 import { uploadMateri, hapusMateri, getMateri } from './handlers/materiHandler.js';
@@ -59,29 +59,46 @@ client.on('message', async (msg) => {
   // Handler untuk registrasi kelas
   if (text.startsWith('!register')) {
     const [, kelasName] = text.split(' ');
+
+    if (!kelasName) {
+      msg.reply('Format salah. Gunakan: !register <nama_kelas>');
+      return;
+    }
+
     const response = registerKelas(groupId, kelasName, sender);
     msg.reply(response);
   }
 
   if (text.startsWith('!update_kelas')) {
     const [, newKelasName] = text.split(' ');
-    const response = updateKelas(groupId, newKelasName);
+
+    if (!newKelasName) {
+      msg.reply('Format salah. Gunakan: !update_kelas <nama_kelas_baru>');
+      return;
+    }
+
+    const response = updateKelas(groupId, newKelasName, sender);
+    msg.reply(response);
+  }
+
+  if (text.startsWith('!info_kelas')) {
+    const response = infoKelas(groupId);
     msg.reply(response);
   }
 
   if (text.startsWith('!unregister')) {
-    const response = unregisterKelas(groupId);
+    const response = unregisterKelas(groupId, sender);
     msg.reply(response);
   }
 
   // Handler untuk jadwal kelas
   if (text.startsWith('!tambah_jadwal')) {
     const args = text.split('!tambah_jadwal ')[1]; // Ambil bagian setelah perintah
-    const [hari, jam, mataKuliah] = args.split('|').map(arg => arg.trim()); // Pisahkan berdasarkan '|'
+    const [hari, jam, mataKuliah, ruang] = args.split('|').map(arg => arg.trim()); // Pisahkan berdasarkan '|'
 
     // Validasi argumen
-    if (!hari || !jam || !mataKuliah) {
-      msg.reply('Format salah. Gunakan: !tambah_jadwal <hari> | <jam_awal>-<jam_akhir> | <mata_kuliah>');
+    if (!hari || !jam || !mataKuliah || !ruang) {
+      msg.reply('Format salah. Gunakan: !tambah_jadwal <hari> | <jam_awal>-<jam_akhir> | <mata_kuliah> | <ruang>');
       return;
     }
 
@@ -92,7 +109,7 @@ client.on('message', async (msg) => {
       return;
     }
 
-    const response = await tambahJadwal(groupId, hari, `${jamAwal}-${jamAkhir}`, mataKuliah);
+    const response = await tambahJadwal(groupId, hari, `${jamAwal}-${jamAkhir}`, mataKuliah, ruang);
     msg.reply(response);
   }
 
@@ -119,12 +136,25 @@ client.on('message', async (msg) => {
       return;
     }
 
+    const deadlineDate = new Date(deadline);
+    if (isNaN(deadlineDate.getTime())) {
+      msg.reply('Format deadline salah. Gunakan format YYYY-MM-DD HH:mm (contoh: 2022-12-31 23:59)');
+      return;
+    }
+
     const response = await tambahTugas(groupId, mataKuliah, judul, deadline);
     msg.reply(response);
   }
 
   if (text.startsWith('!hapus_tugas')) {
-    const [, mataKuliah, judul] = text.split(' ');
+    const args = text.split('!hapus_tugas ')[1]; // Ambil bagian setelah perintah
+    const [mataKuliah, judul] = args.split('|').map(arg => arg.trim()); // Pisahkan berdasarkan '|'
+
+    if (!mataKuliah || !judul) {
+      msg.reply('Format salah. Gunakan: !hapus_tugas <mata_kuliah> | <judul>');
+      return;
+    }
+
     const response = hapusTugas(groupId, mataKuliah, judul);
     msg.reply(response);
   }
@@ -150,7 +180,9 @@ client.on('message', async (msg) => {
   }
 
   if (text.startsWith('!hapus_materi')) {
-    const [, mataKuliah, judul] = text.split(' ');
+    const args = text.split('!hapus_materi ')[1]; // Ambil bagian setelah perintah
+    const [mataKuliah, judul] = args.split('|').map(arg => arg.trim()); // Pisahkan berdasarkan '|'
+
     const response = hapusMateri(groupId, mataKuliah, judul);
     msg.reply(response);
   }
@@ -191,24 +223,46 @@ client.on('message', async (msg) => {
   // Handler untuk fitur tambahan
   if (text.startsWith('!bantuan')) {
     const response = `
-      Daftar Perintah Bot:
-      - !register <kelas>: Mendaftarkan kelas.
-      - !update_kelas <kelas>: Mengubah nama kelas.
-      - !unregister: Menghapus kelas.
-      - !tambah_jadwal <hari> <jam> <mata_kuliah>: Menambahkan jadwal.
-      - !hapus_jadwal <hari> <mata_kuliah>: Menghapus jadwal.
-      - !jadwal <hari>: Menampilkan jadwal.
-      - !tambah_tugas <mata_kuliah> <judul> <deadline>: Menambahkan tugas.
-      - !hapus_tugas <mata_kuliah> <judul>: Menghapus tugas.
-      - !tugas <mata_kuliah>: Menampilkan tugas.
-      - !upload_materi <mata_kuliah> <judul> <link>: Mengupload materi.
-      - !hapus_materi <mata_kuliah> <judul>: Menghapus materi.
-      - !materi <mata_kuliah>: Menampilkan materi.
-      - !leaderboard: Menampilkan leaderboard.
-      - !quote: Menampilkan kutipan motivasi.
-      - !meme: Mengirimkan meme.
-      - !bantuan: Menampilkan daftar perintah.
-    `;
+📋 *Daftar Perintah Bot* 📋
+
+🎓 *Manajemen Kelas*:
+- \`!register <kelas>\` ➡️ Mendaftarkan kelas.
+- \`!update_kelas <kelas>\` ➡️ Mengubah nama kelas.
+- \`!info_kelas <kelas>\` ➡️ Info kelas.
+- \`!unregister\` ➡️ Menghapus kelas.
+
+📅 *Manajemen Jadwal*:
+- \`!tambah_jadwal <hari> | <jam> | <mata_kuliah> | <ruang>\` ➡️ Menambahkan jadwal.
+- \`!hapus_jadwal <hari> | <mata_kuliah>\` ➡️ Menghapus jadwal.
+- \`!jadwal <hari>\` ➡️ Menampilkan jadwal.
+
+📚 *Manajemen Tugas*:
+- \`!tambah_tugas <mata_kuliah> | <judul> | <deadline>\` ➡️ Menambahkan tugas.
+- \`!hapus_tugas <mata_kuliah> | <judul>\` ➡️ Menghapus tugas.
+- \`!tugas <mata_kuliah>\` ➡️ Menampilkan tugas.
+
+📂 *Manajemen Materi*:
+- \`!upload_materi <mata_kuliah> | <judul> | <link>\` ➡️ Mengupload materi.
+- \`!hapus_materi <mata_kuliah> | <judul>\` ➡️ Menghapus materi.
+- \`!materi <mata_kuliah>\` ➡️ Menampilkan materi.
+
+🏆 *Gamifikasi*:
+- \`!leaderboard\` ➡️ Menampilkan leaderboard.
+
+💬 *Fitur Lainnya*:
+- \`!quote\` ➡️ Menampilkan kutipan motivasi.
+- \`!meme\` ➡️ Mengirimkan meme.
+- \`!bantuan\` ➡️ Menampilkan daftar perintah.
+
+🔧 *Mode Bot*:
+- \`!mode_silent\` ➡️ Nonaktifkan notifikasi otomatis.
+- \`!mode_aktif\` ➡️ Aktifkan notifikasi otomatis.
+
+📌 *Catatan*:
+- Gunakan tanda \`|\` untuk memisahkan argumen.
+- Contoh: \`!tambah_jadwal Senin | 08:00-09:00 | Pemrograman Web | Lab 1\`
+`;
+
     msg.reply(response);
   }
 
@@ -238,7 +292,7 @@ cron.schedule('0 8 * * *', async () => {
 });
 
 // Auto-reminder untuk deadline tugas
-cron.schedule('0 12 * * *', async () => {
+cron.schedule('0 9 * * *', async () => {
   for (const groupId in tugas.data) {
     if (tugas.data[groupId]) {
       const tugasKelas = tugas.data[groupId];
@@ -247,7 +301,8 @@ cron.schedule('0 12 * * *', async () => {
         const sekarang = new Date();
         return deadline - sekarang < 24 * 60 * 60 * 1000; // Deadline dalam 24 jam
       });
-      if (deadlineMendekati.length > 0) {
+
+      if (deadlineMendekati.length > 0) { 
         const tugasText = deadlineMendekati.map(t => 
           `${t.mataKuliah} - ${t.judul} (Deadline: ${t.deadline})`).join('\n');
         await client.sendMessage(groupId, `Pengingat deadline tugas:\n${tugasText}`);
