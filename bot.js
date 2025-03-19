@@ -24,6 +24,9 @@ if (!fs.existsSync(authFolder)) {
     console.log('Created auth directory');
 }
 
+// start server
+import { app } from './server.js';
+
 // Function to start the bot
 async function startBot() {
     // Authentication state
