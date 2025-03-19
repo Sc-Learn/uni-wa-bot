@@ -162,7 +162,7 @@ async function processCommand(sock, m, groupId, sender, text) {
             return;
         }
 
-        const response = await tambahJadwal(groupId, hari, `${jamAwal}-${jamAkhir}`, mataKuliah, ruang);
+        const response = await tambahJadwal(groupId, hari.toLowerCase(), `${jamAwal}-${jamAkhir}`, mataKuliah, ruang);
         await reply(response);
     }
 
@@ -174,7 +174,7 @@ async function processCommand(sock, m, groupId, sender, text) {
         }
         
         const [hari, mataKuliah] = args.split('|').map(arg => arg.trim()); // Pisahkan berdasarkan '|'
-        const response = await hapusJadwal(groupId, hari, mataKuliah);
+        const response = await hapusJadwal(groupId, hari.toLowerCase(), mataKuliah);
         await reply(response);
     }
 
@@ -361,39 +361,98 @@ async function processCommand(sock, m, groupId, sender, text) {
 
 // Set up cron jobs for auto reminders
 function setupCronJobs(sock) {
-    // Auto-reminder untuk jadwal kelas
-    cron.schedule('0 8 * * *', async () => {
-        for (const groupId in jadwal.data) {
-            const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
-            if (jadwal.data[groupId] && jadwal.data[groupId][hariIni]) {
-                const jadwalToday = jadwal.data[groupId][hariIni];
-                if (jadwalToday.length > 0) {
-                    const jadwalText = jadwalToday.map(j => `${j.jam} - ${j.mataKuliah}`).join('\n');
-                    await sock.sendMessage(groupId, { text: `Pengingat jadwal hari ini:\n${jadwalText}` });
-                }
-            }
-        }
-    });
+	// Reminder setiap jam 7 pagi untuk jadwal dan tugas hari ini
+	cron.schedule('0 7 * * *', async () => {
+		const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' }).toLowerCase();
+	
+		for (const groupId in jadwal.data) {
+			if (jadwal.data[groupId] && jadwal.data[groupId][hariIni]) {
+					const jadwalToday = jadwal.data[groupId][hariIni];
+					if (jadwalToday.length > 0) {
+					const jadwalText = jadwalToday
+							.map(j => `🕒 *${j.jam}* - 📚 *${j.mataKuliah}*${j.ruang ? ` (📍 *${j.ruang}*)` : ''}`)
+							.join('\n');
 
-    // Auto-reminder untuk deadline tugas
-    cron.schedule('0 9 * * *', async () => {
-        for (const groupId in tugas.data) {
-            if (tugas.data[groupId]) {
-                const tugasKelas = tugas.data[groupId];
-                const deadlineMendekati = tugasKelas.filter((t) => {
-                    const deadline = new Date(t.deadline);
-                    const sekarang = new Date();
-                    return deadline - sekarang < 24 * 60 * 60 * 1000; // Deadline dalam 24 jam
-                });
+					await sock.sendMessage(groupId, { 
+							text: `📅 *Pengingat Jadwal Hari Ini* 📅\n\n${jadwalText}`
+					});
+				}
+			}
+		}
 
-                if (deadlineMendekati.length > 0) { 
-                    const tugasText = deadlineMendekati.map(t => 
-                        `${t.mataKuliah} - ${t.judul} (Deadline: ${t.deadline})`).join('\n');
-                    await sock.sendMessage(groupId, { text: `Pengingat deadline tugas:\n${tugasText}` });
-                }
-            }
+		for (const groupId in tugas.data) {
+			if (tugas.data[groupId] && tugas.data[groupId].length > 0) {
+				const tugasAktif = tugas.data[groupId].filter(t => {
+					const deadline = new Date(t.deadline);
+					const sekarang = new Date();
+					return deadline > sekarang; // Hanya tugas yang belum lewat deadline
+				});
+	
+				if (tugasAktif.length > 0) {
+					const tugasText = tugasAktif
+						.map(t => `📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`)
+						.join('\n\n');
+
+					await sock.sendMessage(groupId, {
+						text: `📅 *Pengingat Tugas Aktif* 📅\n\n${tugasText}`
+					});
+				}
+			}
+		}
+	});
+
+	// Reminder X minutes sebelum jadwal dimulai dan tugas berakhir
+	cron.schedule('*/5 * * * *', async () => {
+		const sekarang = new Date();
+		const hariIni = sekarang.toLocaleDateString('id-ID', { weekday: 'long' }).toLowerCase();
+
+		for (const groupId in jadwal.data) {
+			if (jadwal.data[groupId] && jadwal.data[groupId][hariIni]) {
+				const jadwalToday = jadwal.data[groupId][hariIni];
+				for (const j of jadwalToday) {
+					const [jamMulai] = j.jam.split('-');
+					const waktuMulai = new Date();
+					const [jam, menit] = jamMulai.split(':');
+					waktuMulai.setHours(parseInt(jam), parseInt(menit), 0, 0);
+
+					// Hitung selisih waktu dalam menit
+					const selisihMenit = (waktuMulai - sekarang) / (1000 * 60);
+
+					// Jika sisa 30 menit, kirim reminder
+					if (selisihMenit > 0 && selisihMenit <= 30) {
+						const pesanReminder = `⏰ *Pengingat 30 Menit Sebelum Kelas* ⏰\n\n📚 *${j.mataKuliah}*\n🕒 *${j.jam}*${j.ruang ? `\n📍 *${j.ruang}*` : ''}`;
+						
+						await sock.sendMessage(groupId, { text: pesanReminder});
+					}
+				}
+			}
+		}
+
+  for (const groupId in tugas.data) {
+    if (tugas.data[groupId] && tugas.data[groupId].length > 0) {
+      for (const t of tugas.data[groupId]) {
+        const deadline = new Date(t.deadline);
+        const selisihJam = (deadline - sekarang) / (1000 * 60 * 60); // Selisih dalam jam
+
+        // Kirim reminder jika sisa waktu 24 jam, 12 jam, atau 1 jam
+        if (selisihJam > 0 && selisihJam <= 24) {
+          let pesanReminder = '';
+          if (selisihJam <= 1) {
+            pesanReminder = `⏰ *Pengingat 1 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
+          } else if (selisihJam <= 12) {
+            pesanReminder = `⏰ *Pengingat 12 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
+          } else if (selisihJam <= 24) {
+            pesanReminder = `⏰ *Pengingat 24 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
+          }
+
+          if (pesanReminder) {
+            await sendReminder(groupId, pesanReminder);
+          }
         }
-    });
+      }
+    }
+  }
+	});
 }
 
 // Start the bot
