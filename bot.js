@@ -286,7 +286,7 @@ async function processCommand(sock, m, groupId, sender, text) {
 
   // Handler untuk fitur tambahan
   else if (text.startsWith('!bantuan')) {
-		const response = `
+    const response = `
 ✨ *Daftar Perintah Bot* ✨
 
 🎓 *Manajemen Kelas*:
@@ -334,8 +334,7 @@ async function processCommand(sock, m, groupId, sender, text) {
 
 🛠️ *Developed by ZidaneSc* 🛠️
 `;
-		
-		msg.reply(response);
+
     await reply(response);
   } else if (text.startsWith('!mode_silent')) {
     // Implementasi mode silent (nonaktifkan notifikasi otomatis)
