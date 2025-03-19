@@ -286,8 +286,8 @@ async function processCommand(sock, m, groupId, sender, text) {
 
   // Handler untuk fitur tambahan
   else if (text.startsWith('!bantuan')) {
-    const response = `
-📋 *Daftar Perintah Bot* 📋
+		const response = `
+✨ *Daftar Perintah Bot* ✨
 
 🎓 *Manajemen Kelas*:
 - \`!register <kelas>\` ➡️ Mendaftarkan kelas.
@@ -325,7 +325,17 @@ async function processCommand(sock, m, groupId, sender, text) {
 📌 *Catatan*:
 - Gunakan tanda \`|\` untuk memisahkan argumen.
 - Contoh: \`!tambah_jadwal Senin | 08:00-09:00 | Pemrograman Web | Lab 1\`
+
+---
+
+🔗 *Status Uptime Bot*: [Lihat Status](https://stats.uptimerobot.com/1iMAT6U5lo)
+
+---
+
+🛠️ *Developed by ZidaneSc* 🛠️
 `;
+		
+		msg.reply(response);
     await reply(response);
   } else if (text.startsWith('!mode_silent')) {
     // Implementasi mode silent (nonaktifkan notifikasi otomatis)
