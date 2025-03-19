@@ -28,5 +28,3 @@ async function getMeme() {
 }
 
 export { getQuote, getMeme };
-
-

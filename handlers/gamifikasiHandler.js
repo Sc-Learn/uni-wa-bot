@@ -14,7 +14,7 @@ const updateAktivitas = (groupId, userId) => {
 
 const getLeaderboard = (groupId) => {
   if (!aktivitas.data[groupId] || Object.keys(aktivitas.data[groupId]).length === 0) {
-    return "📭 *Belum ada data aktivitas untuk grup ini.*";
+    return '📭 *Belum ada data aktivitas untuk grup ini.*';
   }
 
   const sorted = Object.entries(aktivitas.data[groupId])
@@ -22,19 +22,18 @@ const getLeaderboard = (groupId) => {
     .slice(0, 10);
 
   if (sorted.length === 0) {
-    return "📭 *Belum ada data aktivitas untuk grup ini.*";
+    return '📭 *Belum ada data aktivitas untuk grup ini.*';
   }
 
   return (
-    "🏆 *LEADERBOARD* 🏆\n\n" +
-    sorted
-      .map(([user, score], index) => {
-        const medal =
-          index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🔹";
-        return `${medal} *${index + 1}.* ${user.split('@')[0]}: *${score} pesan*`;
-      })
-      .join('\n') +
-    "\n\n🎉 *Terus aktif dan pertahankan posisimu!* 🎉"
+    `🏆 *LEADERBOARD* 🏆\n\n${
+      sorted
+        .map(([user, score], index) => {
+          const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🔹';
+          return `${medal} *${index + 1}.* ${user.split('@')[0]}: *${score} pesan*`;
+        })
+        .join('\n')
+    }\n\n🎉 *Terus aktif dan pertahankan posisimu!* 🎉`
   );
 };
 

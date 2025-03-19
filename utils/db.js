@@ -23,7 +23,7 @@ const defaultData = {
   jadwal: {},
   tugas: {},
   materi: {},
-  aktivitas: {}
+  aktivitas: {},
 };
 
 // Buat instance LowDB untuk setiap database dengan default data
@@ -42,7 +42,7 @@ const initializeDB = async () => {
       jadwal.read().catch(() => console.log('Creating new jadwal database')),
       tugas.read().catch(() => console.log('Creating new tugas database')),
       materi.read().catch(() => console.log('Creating new materi database')),
-      aktivitas.read().catch(() => console.log('Creating new aktivitas database'))
+      aktivitas.read().catch(() => console.log('Creating new aktivitas database')),
     ]);
 
     // Ensure data exists
@@ -58,7 +58,7 @@ const initializeDB = async () => {
       jadwal.write(),
       tugas.write(),
       materi.write(),
-      aktivitas.write()
+      aktivitas.write(),
     ]);
 
     console.log('Database initialization complete');
