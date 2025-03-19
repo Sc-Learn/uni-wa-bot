@@ -1,5 +1,6 @@
 .wwebjs_auth/
 .wwebjs_cache/
+.baileys_auth_info/
 
 package-lock.json
 

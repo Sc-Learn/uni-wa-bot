@@ -1,6 +1,6 @@
 {
   "ignore": [
-    ".wwebjs_auth/*",
+    ".baileys_auth_info/*",
     "database/*",
     "node_modules/*"
   ]
