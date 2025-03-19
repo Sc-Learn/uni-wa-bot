@@ -405,7 +405,7 @@ function setupCronJobs(sock) {
           const selisihMenit = (waktuMulai - sekarang) / (1000 * 60);
 
           // Jika sisa 30 menit, kirim reminder
-          if (selisihMenit > 0 && selisihMenit <= 30) {
+          if (selisihMenit > 25 && selisihMenit <= 30) {
             const pesanReminder = `⏰ *Pengingat 30 Menit Sebelum Kelas* ⏰\n\n📚 *${j.mataKuliah}*\n🕒 *${j.jam}*${j.ruang ? `\n📍 *${j.ruang}*` : ''}`;
 
             await sock.sendMessage(groupId, { text: pesanReminder });
@@ -414,30 +414,30 @@ function setupCronJobs(sock) {
       }
     }
 
-    for (const groupId in tugas.data) {
-      if (tugas.data[groupId] && tugas.data[groupId].length > 0) {
-        for (const t of tugas.data[groupId]) {
-          const deadline = new Date(t.deadline);
-          const selisihJam = (deadline - sekarang) / (1000 * 60 * 60); // Selisih dalam jam
+    // for (const groupId in tugas.data) {
+    //   if (tugas.data[groupId] && tugas.data[groupId].length > 0) {
+    //     for (const t of tugas.data[groupId]) {
+    //       const deadline = new Date(t.deadline);
+    //       const selisihJam = (deadline - sekarang) / (1000 * 60 * 60); // Selisih dalam jam
 
-          // Kirim reminder jika sisa waktu 24 jam, 12 jam, atau 1 jam
-          if (selisihJam > 0 && selisihJam <= 24) {
-            let pesanReminder = '';
-            if (selisihJam <= 1) {
-              pesanReminder = `⏰ *Pengingat 1 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
-            } else if (selisihJam <= 12) {
-              pesanReminder = `⏰ *Pengingat 12 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
-            } else if (selisihJam <= 24) {
-              pesanReminder = `⏰ *Pengingat 24 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
-            }
+    //       // Kirim reminder jika sisa waktu 24 jam, 12 jam, atau 1 jam
+    //       if (selisihJam > 0 && selisihJam <= 24) {
+    //         let pesanReminder = '';
+    //         if (selisihJam <= 1) {
+    //           pesanReminder = `⏰ *Pengingat 1 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
+    //         } else if (selisihJam <= 12) {
+    //           pesanReminder = `⏰ *Pengingat 12 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
+    //         } else if (selisihJam <= 24) {
+    //           pesanReminder = `⏰ *Pengingat 24 Jam Sebelum Deadline* ⏰\n\n📚 *${t.mataKuliah}*\n📄 *${t.judul}*\n⏰ *Deadline: ${t.deadline}*`;
+    //         }
 
-            if (pesanReminder) {
-              await sendReminder(groupId, pesanReminder);
-            }
-          }
-        }
-      }
-    }
+    //         if (pesanReminder) {
+    //           await sendReminder(groupId, pesanReminder);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   });
 }
 
