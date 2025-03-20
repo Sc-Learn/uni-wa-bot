@@ -1,0 +1,26 @@
+{
+  "120363181075547403@g.us": [
+    {
+      "mataKuliah": "BI",
+      "judul": "Tugas 1 mandiri",
+      "deadline": "2025-03-29 07:00"
+    },
+    {
+      "mataKuliah": "Mobile",
+      "judul": "pertemuan 1",
+      "deadline": "2025-04-03 23:59"
+    }
+  ],
+  "120363167888979856@g.us": [
+    {
+      "mataKuliah": "Business Intelligence",
+      "judul": "Tugas mandir 1: Soal di mybest",
+      "deadline": "2025-03-23 23:59:00"
+    },
+    {
+      "mataKuliah": "Mobile Programing",
+      "judul": "Instalasi JDK, Dart, Flutter dan Android Studio (optional)",
+      "deadline": "2025-03-24 23:59"
+    }
+  ]
+}

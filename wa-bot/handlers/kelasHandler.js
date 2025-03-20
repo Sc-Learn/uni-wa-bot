@@ -1,5 +1,5 @@
-import { kelas } from '../utils/db.js';
-import { isAdmin } from '../utils/helper.js';
+import { kelas } from '../../shared/utils/db.js';
+import { isAdmin } from '../../shared/utils/helper.js';
 
 const registerKelas = (groupId, kelasName, adminId) => {
   if (kelas.data[groupId]) {

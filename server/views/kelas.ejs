@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilih Kelas - Class Bot</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .kelas-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .kelas-item {
+      margin-bottom: 15px;
+    }
+
+    .kelas-link {
+      display: block;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .kelas-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-5px);
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #e0e0e0;
+    }
+
+    .footer a {
+      color: #00ff88;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #00cc66;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pilih Kelas 🎓</h1>
+    <ul class="kelas-list">
+      <% Object.keys(kelas).forEach(groupId => { %>
+        <li class="kelas-item">
+          <a href="/dashboard?groupId=<%= groupId %>" class="kelas-link"><%= kelas[groupId].nama %></a>
+        </li>
+      <% }) %>
+    </ul>
+
+    <div class="footer">
+      <p>Dikembangkan dengan ❤️ oleh <a href="https://github.com/zidane-sc" target="_blank">ZidaneSc</a></p>
+      <p>© 2025 Class Bot. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>

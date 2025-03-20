@@ -1,4 +1,4 @@
-import { materi } from '../utils/db.js';
+import { materi } from '../../shared/utils/db.js';
 
 const uploadMateri = async (groupId, mataKuliah, judul, link) => {
   materi.data[groupId] = materi.data[groupId] || [];

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifikasi OTP</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>Verifikasi OTP</h1>
+  <form action="/api/verify-otp" method="POST">
+    <input type="hidden" name="groupId" value="<%= groupId %>">
+    <label for="otp">OTP:</label>
+    <input type="text" id="otp" name="otp" required>
+    <button type="submit">Verifikasi</button>
+  </form>
+  <button id="requestOtpButton">Kirim OTP</button>
+</body>
+
+</html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const groupId = urlParams.get('groupId');
+    
+    if (groupId) {
+      document.getElementById('requestOtpButton').addEventListener('click', function() {
+        fetch('/api/request-otp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ groupId: groupId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('OTP requested:', data);
+        })
+        .catch(error => {
+          console.error('Error requesting OTP:', error);
+        });
+      });
+    } else {
+      console.error('groupId not found in query parameters');
+    }
+  });
+</script>

@@ -1,0 +1,148 @@
+{
+  "120363181075547403@g.us": {
+    "selasa": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Mobile Programming",
+        "ruang": "307"
+      }
+    ],
+    "senin": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Web Programming 3",
+        "ruang": "404"
+      },
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Business Intelligence",
+        "ruang": "404"
+      }
+    ],
+    "kamis": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Pemodelan Sistem Informasi",
+        "ruang": "305"
+      },
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Manajemen Proyek Sistem Informasi",
+        "ruang": "305"
+      }
+    ],
+    "jumat": [
+      {
+        "jam": "17:30-18:50",
+        "mataKuliah": "Pendidikan Agama",
+        "ruang": "Online"
+      }
+    ],
+    "rabu": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Perancangan Sistem Informasi",
+        "ruang": "201"
+      },
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Software Quality Assurance",
+        "ruang": "301"
+      }
+    ]
+  },
+  "120363167888979856@g.us": {
+    "selasa": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Mobile Programming",
+        "ruang": "307"
+      }
+    ],
+    "senin": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Web Programming 3",
+        "ruang": "404"
+      },
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Business Intelligence",
+        "ruang": "404"
+      }
+    ],
+    "kamis": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Pemodelan Sistem Informasi",
+        "ruang": "305"
+      },
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Manajemen Proyek Sistem Informasi",
+        "ruang": "305"
+      }
+    ],
+    "jumat": [
+      {
+        "jam": "17:30-18:50",
+        "mataKuliah": "Pendidikan Agama",
+        "ruang": "Online"
+      }
+    ],
+    "rabu": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Perancangan Sistem Informasi",
+        "ruang": "201"
+      },
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Software Quality Assurance",
+        "ruang": "301"
+      }
+    ]
+  },
+  "120363042615608765@g.us": {
+    "selasa": [
+      {
+        "jam": "17:30-19:30",
+        "mataKuliah": "Arsitektur Enterprise",
+        "ruang": "403"
+      },
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Data Warehouse & BI",
+        "ruang": "403"
+      }
+    ],
+    "senin": [
+      {
+        "jam": "18:50-21:30",
+        "mataKuliah": "Sistem Penunjang Keputusan",
+        "ruang": "402"
+      }
+    ],
+    "kamis": [
+      {
+        "jam": "19:30-21:30",
+        "mataKuliah": "Teknik Riset Operasional",
+        "ruang": "307"
+      }
+    ],
+    "jumat": [
+      {
+        "jam": "18:50-21:30",
+        "mataKuliah": "Rekayasa Perangkat Lunak",
+        "ruang": "302"
+      }
+    ],
+    "sabtu": [
+      {
+        "jam": "17:30-20:10",
+        "mataKuliah": "Audit Sistem Informasi",
+        "ruang": "online"
+      }
+    ]
+  }
+}

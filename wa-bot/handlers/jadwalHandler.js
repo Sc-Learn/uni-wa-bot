@@ -1,4 +1,4 @@
-import { jadwal as jadwalDB } from '../utils/db.js';
+import { jadwal as jadwalDB } from '../../shared/utils/db.js';
 
 const tambahJadwal = (groupId, hari, jam, mataKuliah, ruang) => {
   if (!jadwalDB.data[groupId]) {
@@ -37,15 +37,15 @@ const getJadwal = (groupId, hari) => {
 
   if (!hari) {
     const hariUrutan = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-    let allJadwal = ['📅 *Jadwal Mingguan* 📅\n'];
-
-    for (const h of hariUrutan) {
+    const allJadwal = hariUrutan.reduce((acc, h) => {
       if (jadwalDB.data[groupId][h]) {
-        allJadwal.push(`\n📅 *${h.toUpperCase()}*:`);
+        acc.push(`\n📅 *${h.toUpperCase()}*:`);
         const sortedJadwal = jadwalDB.data[groupId][h].sort((a, b) => a.jam.split('-')[0].localeCompare(b.jam.split('-')[0]));
-        allJadwal = allJadwal.concat(sortedJadwal.map((j) => `  🕒 *${j.jam}* - 📚 *${j.mataKuliah}* (📍 *${j.ruang}*)`));
+        const jadwalStrings = sortedJadwal.map((j) => `  🕒 *${j.jam}* - 📚 *${j.mataKuliah}* (📍 *${j.ruang}*)`);
+        acc.push(...jadwalStrings);
       }
-    }
+      return acc;
+    }, ['📅 *Jadwal Mingguan* 📅\n']);
     return allJadwal.join('\n');
   }
 

@@ -1,4 +1,4 @@
-import { tugas } from '../utils/db.js';
+import { tugas } from '../../shared/utils/db.js';
 
 const tambahTugas = async (groupId, mataKuliah, judul, deadline) => {
   tugas.data[groupId] = tugas.data[groupId] || [];
