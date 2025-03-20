@@ -22,6 +22,10 @@ app.set('view engine', 'ejs');
 // Gunakan rute API
 app.use('/api', apiRoutes);
 
+app.get('/health', (req, res) => {
+  res.send('OK');
+});
+
 // Rute untuk halaman utama
 app.get('/', (req, res) => {
   res.render('index');
